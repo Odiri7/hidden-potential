@@ -1,6 +1,3 @@
-from common import random, pygame, sys
-
-
 # Classes for characters
 class Entity: # Playable and non playable
     def __init__(self, name, hp, mp, attack_power, shield, agility, evasion):
@@ -101,8 +98,8 @@ player_party = [
         agility=10, 
         evasion=5, 
         level=1, 
-        crit_rate=5
-        crit_multiplier = 30
+        crit_rate=5,
+        crit_multiplier = 30,
         summon="Fire"
     ),
     Character(
@@ -114,8 +111,8 @@ player_party = [
         agility=10, 
         evasion=5, 
         level=1, 
-        crit_rate=5
-        crit_multiplier = 30
+        crit_rate=5,
+        crit_multiplier = 30,
         summon="Ice"
     )
 ]
