@@ -52,7 +52,6 @@ class Character(Entity):
         else:
             print(f"{self.name}'s attack is blocked by {enemy.name}!")
 
-
     def perform_guard(self):
         shield_increase = self.max_hp * 0.3
         print(f"{self.name} guards, increasing shield by {shield_increase}.")
@@ -86,6 +85,10 @@ class Main_Character(Character):
 
     def use_item(self, item):
         print(f"{self.name} uses {item}!")
+    
+    def reroll_initiative(self):
+        initiative = self.agility + random.randint(1, 10)
+        return initiative
 
 
 
