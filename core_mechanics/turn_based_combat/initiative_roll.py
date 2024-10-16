@@ -28,7 +28,11 @@ def determine_turn_order(player_party, enemies):
     reroll_choice = input("Do you want to reroll your initiative? (yes/no): ").strip().lower()
     if reroll_choice == 'yes':
         new_initiative = main_character.reroll_initiative()
-        turn_order[0] = (main_character, new_initiative)  # Update their position with the new initiative
+        position = 0
+        for index, (character, initiative) in enumerate(turn_order): # States the index
+            if character.name == main_character.name: # Compare by name
+                turn_order[index] = (main_character, new_initiative) # Update their position with the new initiative
+                break
         turn_order = sorted(turn_order, key=lambda x: x[1], reverse=True)  # Re-sort the turn order after the reroll
     
     return [entity for entity in turn_order]
@@ -46,7 +50,7 @@ if __name__ == "__main__":
         def __repr__(self):
             return f"{self.name}"
 
-    p1 = Test("Human1", 5)
+    p1 = Test("JOshua", 1)
     p2 = Test("Human2", 5)
     p3 = Test("Human3", 10)
     p4 = Test("Human4", 30)
