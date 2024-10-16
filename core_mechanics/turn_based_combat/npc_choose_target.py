@@ -1,10 +1,11 @@
 import pygame
 import random
 from combat_loop import *
-from enemy_ai import *
 from initiative_roll import *
+from npc_choose_target import *
 from player_turn import *
 from characters import *
+from enemy_ai import *
 
 def npc_choose_target(targets):
     

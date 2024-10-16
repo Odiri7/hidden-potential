@@ -1,10 +1,11 @@
 import pygame
 import random
 from combat_loop import *
-from enemy_ai import *
+from initiative_roll import *
 from npc_choose_target import *
 from player_turn import *
 from characters import *
+from enemy_ai import *
 
 def determine_turn_order(player_party, enemies):
     turn_order = []
@@ -50,7 +51,7 @@ if __name__ == "__main__":
         def __repr__(self):
             return f"{self.name}"
 
-    p1 = Test("JOshua", 1)
+    p1 = Test("Human1", 1)
     p2 = Test("Human2", 5)
     p3 = Test("Human3", 10)
     p4 = Test("Human4", 30)

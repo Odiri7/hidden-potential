@@ -1,10 +1,10 @@
 import pygame
 import random
 from combat_loop import *
-from enemy_ai import *
 from initiative_roll import *
 from npc_choose_target import *
 from characters import *
+from enemy_ai import *
 
 def player_turn(character):
     action = input("Choose an action: 1. Attack 2. Use Item 3. Guard ")

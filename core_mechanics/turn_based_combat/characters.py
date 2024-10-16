@@ -64,6 +64,10 @@ class Character(Entity):
             self.status_effects.remove("Guarded")  # Remove guard effect after skipping
             return False  # Skip the turn
         return True  # Otherwise, take a normal turn
+    
+    def choose_target(self, enemies):
+        # AI chooses the enemy with the lowest HP
+        return min(enemies, key=lambda character: character.hp)
 
 class Enemy(Entity):
     def __init__(self, name, hp, mp, attack_power, shield, agility, evasion, exp):
@@ -78,6 +82,21 @@ class Enemy(Entity):
         else:
             print(f"{self.name}'s attack is blocked by {character.name}!")
 
+    def take_turn(self, player_party):
+        target = self.choose_target(player_party)
+        # If the target's HP is low, the enemy will focus on them
+        if target.hp < target.max_hp * 0.5:
+            print(f"{self.enemy.name} focuses on {target.name}!")
+        else:
+            print(f"{self.enemy.name} attacks {target.name}!")
+
+        # Perform the attack on the chosen target
+        self.enemy.attack(target)
+    
+    def choose_target(self, player_party):
+        # AI chooses the player with the lowest HP
+        return min(player_party, key=lambda character: character.hp)
+
 
 class Main_Character(Character):
     def __init__(self, name, hp, mp, attack_power, shield, agility, evasion, level, crit_rate, summon):
@@ -89,6 +108,18 @@ class Main_Character(Character):
     def reroll_initiative(self):
         initiative = self.agility + random.randint(1, 10)
         return initiative
+    
+    def choose_target(self, enemies):
+        alive_enemies = [enemy for enemy in enemies if not enemy.is_dead()]
+
+        # Display targets and their health
+        print("Choose a target:")
+        for i, enemy in enumerate(alive_enemies):
+            print(f"{i+1}: {enemy.name} (HP: {enemy.hp})")
+
+        # Get player input for target selection
+        
+
 
 
 
@@ -132,7 +163,7 @@ enemies = [
         shield=2, 
         agility=6, 
         evasion=3, 
-        exp=50  # Experience points granted when defeated
+        exp=50,  # Experience points granted when defeated
     ),
     Enemy(
         name="Troll", 
@@ -142,6 +173,6 @@ enemies = [
         shield=1, 
         agility=5, 
         evasion=2, 
-        exp=75
+        exp=75,
     )
 ]
