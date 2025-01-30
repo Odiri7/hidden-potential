@@ -5,46 +5,46 @@ pygame.init()
 
 class LoginUI:
     def __init__(self):
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.manager = pygame_gui.UIManager((SCREEN_WIDTH, SCREEN_HEIGHT)) # GUI Manager initialisation
-        self.clock = pygame.time.Clock()
+        self.__screen = SCREEN
+        self.__manager = UI_MANAGER  # GUI Manager initialisation
+        self.__clock = CLOCK
 
         # Defining UI elements
-        self.register_button = pygame_gui.elements.UIButton(
+        self.__register_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((430, 237), (100, 50)),
             text="Register",
-            manager=self.manager)
+            manager=self.__manager)
         
-        self.login_button = pygame_gui.elements.UIButton(
+        self.__login_button = pygame_gui.elements.UIButton(
             relative_rect=pygame.Rect((430, 307), (100, 50)),
             text="Login",
-            manager=self.manager)
+            manager=self.__manager)
         
     def run(self):
         running = True
         while running:
-            time_delta = self.clock.tick(60) / 1000.0 # Convert to milliseconds
+            time_delta = self.__clock.tick(60) / 1000.0  # Convert to milliseconds
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
 
                 # Handle GUI events
-                self.manager.process_events(event)
+                self.__manager.process_events(event)
 
                 # Check button clicks
-                if event.type == pygame.USEREVENT: # Handling user button interactions
+                if event.type == pygame.USEREVENT:  # Handling user button interactions
                     if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
-                        if event.ui_element == self.login_button:
+                        if event.ui_element == self.__login_button:
                             print("Login pressed")
                             running = False
                             return "menu"
-                        if event.ui_element == self.register_button:
+                        if event.ui_element == self.__register_button:
                             print("Register pressed")
             
             # Update and draw UI
-            self.manager.update(time_delta)
-            self.screen.fill((0, 0, 0))
-            self.manager.draw_ui(self.screen)
+            self.__manager.update(time_delta)
+            self.__screen.fill((0, 0, 0))
+            self.__manager.draw_ui(self.__screen)
 
             pygame.display.update()
 

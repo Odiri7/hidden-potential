@@ -9,32 +9,30 @@ from combat_ui import CombatUI
 class UIController:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        self.clock = pygame.time.Clock()
-        self.running = True
-        self.current_screen = "login"
+        self.__running = True
+        self.__current_screen = "login"
 
     def run(self):
-        while self.running:
+        while self.__running:
             # Depending on the current screen, show the relevant UI class
-            if self.current_screen == "login":
+            if self.__current_screen == "login":
                 current_ui = LoginUI()
-            elif self.current_screen == "menu":
+            elif self.__current_screen == "menu":
                 current_ui = MenuUI()
-            elif self.current_screen == "combat":
+            elif self.__current_screen == "combat":
                 current_ui = CombatUI()
-            elif self.current_screen == "story":
+            elif self.__current_screen == "story":
                 current_ui = StoryUI()
             else:
-                self.running = False
+                self.__running = False
                 return
 
             # Run the UI and get the next screen
-            self.current_screen = current_ui.run()  # This method returns the next screen
+            self.__current_screen = current_ui.run()  # This method returns the next screen
 
             # Handle quitting
-            if self.current_screen == "quit":
-                self.running = False
+            if self.__current_screen == "quit":
+                self.__running = False
 
         pygame.quit()
 
