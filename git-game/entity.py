@@ -1,10 +1,9 @@
 from globals import *
-import pygame as py
 from abc import ABC, abstractmethod
-import random
+from message_display import MessageDisplay
 
 class Entity(ABC):
-    def __init__(self, name: str, hp: int =10, max_hp: int=20, attack: int=5, shield: int =0, agility: int=5, evasion: int=20, guarded: bool=False, healer: bool=False):
+    def __init__(self, name: str, hp: int =10, max_hp: int=20, attack: int=5, shield: int =0, agility: int=5, evasion: int=5, guarded: bool=False, healer: bool=False):
         self.name = name
         self.__hp = hp
         self.__max_hp = max_hp
@@ -14,12 +13,15 @@ class Entity(ABC):
         self.__evasion = evasion # Range (1-100) does not change
         self.__guarded = guarded
         self.__healer = healer # Defines role
+        self._message_display = MessageDisplay()
     
+    # Getters and setters
     def set_hp(self, value):
-        if self.get_hp() + value < self.get_max_hp():
-              self.__hp = value
-        else:
-            self.__hp = self.get_max_hp()
+        if value < 0:
+            if self.get_hp() + value < self.get_max_hp():
+                self.__hp = value
+            else:
+                self.__hp = self.get_max_hp()
 
     def get_hp(self):
         return self.__hp
@@ -63,27 +65,14 @@ class Entity(ABC):
 
     def get_healer(self):
         return self.__healer
-      
-    def evade_chance(self):
-        random_value = random.randint(1, 100)
-        return random_value <= self.get_evasion()
-
+    
+    def is_dead(self):
+        return self.get_hp() <= 0
+    
+    # Abstract methods
+    @abstractmethod
     def deal_damage(self, target):
-        shield_damage = 0
-        hp_damage = 0
-
-        if self.get_attack() < target.get_shield():
-            shield_damage = self.get_attack() - target.get_shield()
-        else:
-            shield_damage = target.get_shield()
-            hp_damage = self.get_attack() - target.get_shield()
-
-        # Test for critical hit
-        if isinstance(self, Character):  # Only characters can critical hit
-            if self.critical_hit_test():
-                hp_damage *= Character.crit_multiplier  # Apply critical multiplier
-
-        return shield_damage, hp_damage
+        pass
     
     @abstractmethod
     def take_turn(self):
@@ -92,3 +81,25 @@ class Entity(ABC):
     @abstractmethod
     def execute_action(self):
         pass
+
+    # Methods
+    def evade_chance(self):
+        random_value = random.randint(1, 100) 
+        # Returns true if entity's evasion is higher than the random value, meaning they dodged successfully
+        return random_value <= self.get_evasion()
+    
+    def apply_damage(self, shield_damage, hp_damage):
+        self.set_shield(self.get_shield() - shield_damage)
+        self._message_display.show_message(f"{self.name} shielded {shield_damage} damage!")
+        
+        if hp_damage > 0:
+            self.set_hp(self.get_hp() - hp_damage)
+            if self.get_hp() <= 0:
+                self._message_display.show_message(f"{self.name} was defeated!")
+            else:
+                self._message_display.show_message(f"{self.name} took {hp_damage} damage!")
+        else:
+            self._message_display.show_message(f"{self.name} fully blocked the attack!")
+
+    
+
